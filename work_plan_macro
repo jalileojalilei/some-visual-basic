@@ -1,0 +1,260 @@
+Sub is_programı()
+
+Worksheets("İŞ PROGRAMI").Activate
+
+'*Değişkenlerin Tanımlanması*
+    Dim sozlesme_bedeli As Long
+    Dim yer_teslim_tarihi As Date
+    Dim sozlesme_suresi As Long
+    Dim sozlesme_bitis_tarihi As Date
+    Dim sozlesme_aylari As Integer
+    Dim poz_sayisi As Integer
+    
+    sozlesme_bedeli = Worksheets("SÖZLEŞME BİLGİLERİ").Range("B12").Value
+    yer_teslim_tarihi = Worksheets("SÖZLEŞME BİLGİLERİ").Range("B14").Value
+    sozlesme_suresi = Worksheets("SÖZLEŞME BİLGİLERİ").Range("B15").Value
+    sozlesme_bitis_tarihi = yer_teslim_tarihi + sozlesme_suresi - 1
+    sozlesme_aylari = VBA.DateDiff("m", Worksheets("SÖZLEŞME BİLGİLERİ").Range("B14").Value, Worksheets("SÖZLEŞME BİLGİLERİ").Range("B16").Value) + 1
+    poz_sayisi = Worksheets("POZLAR VE FİYATLAR").Range("a" & Rows.Count).End(xlUp).Row - 1
+'***Değişkenlerin Tanımlanması***
+   
+'*Kapak Kopyalama*
+    'Sheets.Add(After:=Sheets("İŞ PROGRAMI KAPAK")).Name = "İŞ PROGRAMI"
+    Worksheets("İŞ PROGRAMI KAPAK").Range("A1", "AE15").Copy
+        With Range("A1")
+            .PasteSpecial xlPasteColumnWidths
+            .PasteSpecial xlPasteValues
+            .PasteSpecial xlPasteFormats
+        End With
+    
+    Worksheets("İŞ PROGRAMI KAPAK").Range("A17", "D18").Copy
+        With Range("A17")
+            .PasteSpecial xlPasteColumnWidths
+            .PasteSpecial xlPasteValues
+            .PasteSpecial xlPasteFormats
+        End With
+'***Kapak Kopyalama***
+
+'*İş Programının Hazırlanması*
+    For i = 20 To poz_sayisi + 19
+        Cells(i, 1).Value = Worksheets("POZLAR VE FİYATLAR").Cells(i - 18, 1).Value
+        Cells(i, 1).VerticalAlignment = xlCenter
+        Cells(i, 1).HorizontalAlignment = xlCenter
+        Cells(i, 1).Font.Name = "Arial"
+  
+        Cells(i, 2).Value = Worksheets("POZLAR VE FİYATLAR").Cells(i - 18, 2).Value
+        Cells(i, 2).VerticalAlignment = xlCenter
+        Cells(i, 2).HorizontalAlignment = xlCenter
+        Cells(i, 2).Font.Name = "Arial"
+            
+        Cells(i, 3).Value = Worksheets("POZLAR VE FİYATLAR").Cells(i - 18, 3).Value
+        Cells(i, 3).VerticalAlignment = xlCenter
+        Cells(i, 3).HorizontalAlignment = xlLeft
+        Cells(i, 3).Font.Name = "Arial"
+            
+        Cells(i, 4).Value = Worksheets("POZLAR VE FİYATLAR").Cells(i - 18, 7).Value
+        Cells(i, 4).VerticalAlignment = xlCenter
+        Cells(i, 4).HorizontalAlignment = xlRight
+        Cells(i, 4).NumberFormat = "#,##0.00"
+        Cells(i, 4).Font.Name = "Arial"
+    Next i
+
+    Range("E200").Value = yer_teslim_tarihi
+    For i = 1 To sozlesme_aylari
+        Cells(200, 5 + i).Value = DateAdd("m", i, yer_teslim_tarihi)
+        Cells(17, 4 + i).Value = Year(Cells(200, 4 + i))
+        Cells(17, 4 + i).HorizontalAlignment = xlCenter
+        Cells(17, 4 + i).VerticalAlignment = xlCenter
+        
+        Cells(201, 4 + i).Value = Month(Cells(200, 4 + i))
+        Cells(18, 4 + i).Value = Cells(200, 4 + i).Value
+        Cells(18, 4 + i).HorizontalAlignment = xlCenter
+        Cells(18, 4 + i).VerticalAlignment = xlCenter
+        Cells(18, 4 + i).NumberFormat = "mmmm"
+        Cells(1, 4 + i).NumberFormat = "General"
+    Next i
+        
+    For i = 1 To sozlesme_aylari - 2
+        Cells(19, 5 + i).Value = Day(Application.WorksheetFunction.EoMonth(Cells(18, 5 + i).Value, 0))
+        Cells(19, 5 + i).HorizontalAlignment = xlCenter
+        Cells(19, 5 + i).VerticalAlignment = xlCenter
+    Next i
+        
+        Cells(19, 5).Value = Day(Application.WorksheetFunction.EoMonth(Cells(18, 5).Value, 0)) - Day(yer_teslim_tarihi) + 1
+        Cells(19, 5).HorizontalAlignment = xlCenter
+        Cells(19, 5).VerticalAlignment = xlCenter
+
+        Cells(19, 4 + sozlesme_aylari).Value = Day(sozlesme_bitis_tarihi)
+        Cells(19, 4 + sozlesme_aylari).HorizontalAlignment = xlCenter
+        Cells(19, 4 + sozlesme_aylari).VerticalAlignment = xlCenter
+    
+    For i = 5 To sozlesme_aylari + 4
+        For j = 20 To poz_sayisi + 19
+            Cells(j, i).Value = (Cells(j, 4).Value / sozlesme_suresi) * Cells(19, i).Value
+            Cells(j, i).NumberFormat = "#,##0.00"
+            Cells(j, i).VerticalAlignment = xlCenter
+            Cells(j, i).HorizontalAlignment = xlCenter
+            Cells(j, i).Font.Name = "Arial"
+        Next j
+    Next i
+        
+    Range("A" & poz_sayisi + 20).Value = "TOPLAM"
+    Range("A" & poz_sayisi + 20, "C" & poz_sayisi + 20).Merge
+    Range("A" & poz_sayisi + 20).HorizontalAlignment = xlRight
+    Range("A" & poz_sayisi + 20).VerticalAlignment = xlCenter
+    
+    For i = 4 To sozlesme_aylari + 4
+        Cells(poz_sayisi + 20, i) = Application.WorksheetFunction.Sum(Range(Cells(20, i), Cells(poz_sayisi + 19, i)))
+        Cells(poz_sayisi + 20, i).VerticalAlignment = xlCenter
+        Cells(poz_sayisi + 20, i).HorizontalAlignment = xlRight
+        Cells(poz_sayisi + 20, i).NumberFormat = "#,##0.00"
+        Cells(poz_sayisi + 20, i).Font.Name = "Arial"
+    Next i
+        
+    For i = 5 To sozlesme_aylari + 4
+        Cells(poz_sayisi + 21, i).Value = Cells(poz_sayisi + 20, i).Value
+        Cells(poz_sayisi + 21, i).NumberFormat = "#,##0.00"
+        Cells(poz_sayisi + 21, i).Font.Name = "Arial"
+    Next i
+        
+    For i = 6 To sozlesme_aylari + 4
+        Cells(poz_sayisi + 22, i).Value = Cells(poz_sayisi + 22, i - 1).Value + Cells(poz_sayisi + 21, i - 1).Value
+        Cells(poz_sayisi + 22, i).NumberFormat = "#,##0.00"
+        Cells(poz_sayisi + 22, i).Font.Name = "Arial"
+    Next i
+        
+    For i = 5 To sozlesme_aylari + 4
+        Cells(poz_sayisi + 23, i).Value = Application.WorksheetFunction.Sum(Range(Cells(poz_sayisi + 21, i), Cells(poz_sayisi + 22, i)))
+        Cells(poz_sayisi + 23, i).NumberFormat = "#,##0.00"
+        Cells(poz_sayisi + 23, i).Font.Name = "Arial"
+    Next i
+    
+        Cells(poz_sayisi + 21, 4).Value = "AYLIK YEKUN"
+        Cells(poz_sayisi + 21, 4).HorizontalAlignment = xlLeft
+        Cells(poz_sayisi + 21, 4).VerticalAlignment = xlCenter
+        Cells(poz_sayisi + 21, 4).Font.Name = "Arial"
+        Cells(poz_sayisi + 21, 4).Font.Size = 10
+    
+        Cells(poz_sayisi + 22, 4).Value = "NAKLİ YEKUN"
+        Cells(poz_sayisi + 22, 4).HorizontalAlignment = xlLeft
+        Cells(poz_sayisi + 22, 4).VerticalAlignment = xlCenter
+        Cells(poz_sayisi + 22, 4).Font.Name = "Arial"
+        Cells(poz_sayisi + 22, 4).Font.Size = 10
+    
+        Cells(poz_sayisi + 23, 4).Value = "GENEL YEKUN"
+        Cells(poz_sayisi + 23, 4).HorizontalAlignment = xlLeft
+        Cells(poz_sayisi + 23, 4).VerticalAlignment = xlCenter
+        Cells(poz_sayisi + 23, 4).Font.Name = "Arial"
+        Cells(poz_sayisi + 23, 4).Font.Size = 10
+    
+    For i = 5 To sozlesme_aylari + 4
+        Cells(poz_sayisi + 25, i).Value = Cells(17, i).Value
+        Cells(poz_sayisi + 25, i).VerticalAlignment = xlCenter
+        Cells(poz_sayisi + 25, i).HorizontalAlignment = xlCenter
+        Cells(poz_sayisi + 25, i).Font.Name = "Arial"
+        
+        Cells(poz_sayisi + 26, i).Value = Cells(18, i).Value
+        Cells(poz_sayisi + 26, i).NumberFormat = "mmmm"
+        Cells(poz_sayisi + 26, i).VerticalAlignment = xlCenter
+        Cells(poz_sayisi + 26, i).HorizontalAlignment = xlCenter
+        Cells(poz_sayisi + 26, i).Font.Name = "Arial"
+        
+        Cells(poz_sayisi + 27, i).Value = Cells(19, i).Value
+        Cells(poz_sayisi + 27, i).VerticalAlignment = xlCenter
+        Cells(poz_sayisi + 27, i).HorizontalAlignment = xlCenter
+        Cells(poz_sayisi + 27, i).Font.Name = "Arial"
+        
+        Cells(poz_sayisi + 28, i).Value = Cells(poz_sayisi + 23, i).Value
+        Cells(poz_sayisi + 28, i).NumberFormat = "#,##0.00"
+        Cells(poz_sayisi + 28, i).VerticalAlignment = xlCenter
+        Cells(poz_sayisi + 28, i).HorizontalAlignment = xlCenter
+        Cells(poz_sayisi + 28, i).Font.Name = "Arial"
+    Next i
+'***İş Programının Hazırlanması***
+
+'*Formatın Düzenlenmesi*
+    Rows(16).RowHeight = 15
+    Rows(17).RowHeight = 20
+    Rows(18).RowHeight = 20
+    Rows(19).RowHeight = 20
+    
+    For i = 5 To sozlesme_aylari + 4
+        Columns(i).ColumnWidth = 17
+    Next i
+    
+    For i = 1 To 15
+        Rows(i).RowHeight = 25
+    Next i
+      
+    For i = 20 To poz_sayisi + 28
+        Rows(i).RowHeight = 30
+    Next i
+    
+        Rows(poz_sayisi + 24).RowHeight = 15
+    
+        Range(Cells(17, 1), Cells(poz_sayisi + 20, sozlesme_aylari + 4)).Select
+        Selection.Borders.LineStyle = 1
+        
+        Range(Cells(poz_sayisi + 21, 4), Cells(poz_sayisi + 23, sozlesme_aylari + 4)).Select
+        Selection.Borders.LineStyle = 1
+        
+        Range(Cells(poz_sayisi + 25, 4), Cells(poz_sayisi + 28, sozlesme_aylari + 4)).Select
+        Selection.Borders.LineStyle = 1
+            
+    For i = 5 To sozlesme_aylari + 5
+        Worksheets("İŞ PROGRAMI").Cells(poz_sayisi + 160, i).ClearContents
+        Worksheets("İŞ PROGRAMI").Cells(poz_sayisi + 161, i).ClearContents
+    Next i
+'***Formatın Düzenlenmesi***
+   
+'*İş Programı Grafiğinin Düzenlenmesi*
+    
+'***İş Programı Grafiğinin Düzenlenmesi***
+Worksheets("İŞ PROGRAMI").Activate
+
+    Dim ws As Worksheet
+    Dim chrt As chart
+    Dim dt As Range
+        
+        Cells(poz_sayisi + 100, 4).Value = yer_teslim_tarihi
+        Cells(poz_sayisi + 100, 4).NumberFormat = "mmmm"
+        Cells(poz_sayisi + 101, 4).Value = 0
+        Cells(poz_sayisi + 101, 4).NumberFormat = "#,##0.00"
+        
+    For i = 5 To sozlesme_aylari + 3
+        Cells(poz_sayisi + 100, i).Value = Application.WorksheetFunction.EoMonth(Cells(poz_sayisi + 26, i).Value, 0)
+        Cells(poz_sayisi + 100, i).NumberFormat = "dd/mm/yyyy"
+        Cells(poz_sayisi + 101, i).Value = Cells(poz_sayisi + 28, i).Value
+        Cells(poz_sayisi + 101, i).NumberFormat = "#,##0.00"
+    Next
+
+        Cells(poz_sayisi + 100, 4 + sozlesme_aylari).Value = sozlesme_bitis_tarihi
+        'Cells(poz_sayisi + 100, 4 + sozlesme_aylari).NumberFormat = "mmmm"
+        Cells(poz_sayisi + 101, 4 + sozlesme_aylari).Value = Cells(poz_sayisi + 28, 4 + sozlesme_aylari).Value
+        Cells(poz_sayisi + 101, 4 + sozlesme_aylari).NumberFormat = "#,##0.00"
+        
+    Set ws = ActiveSheet
+    Set dt = Range(Cells(poz_sayisi + 100, 4), Cells(poz_sayisi + 101, sozlesme_aylari + 4))
+    Set chrt = ws.Shapes.AddChart2(Left:=Cells(poz_sayisi + 31, 2).Left, Width:=3000, Height:=1000, Top:=Cells(poz_sayisi + 31, 2).Top).chart
+        With chrt
+            .SetSourceData Source:=dt
+            .ChartType = xlLine
+            .ChartTitle.Text = "İŞ PROGRAMI GRAFİĞİ"
+        End With
+   
+    chrt.SetElement msoElementPrimaryCategoryAxisShow
+    chrt.ChartArea.Format.TextFrame2.TextRange.Font.Size = 16
+    chrt.ChartTitle.Characters.Font.Size = 40
+    chrt.ChartTitle.Characters.Font.Bold = True
+    chrt.ChartTitle.Characters.Font.Name = "Arial"
+    chrt.SetElement msoElementDataLabelTop
+
+End Sub
+
+Sub Makro3()
+    Worksheets("İŞ PROGRAMI").Activate
+    Cells.Select
+    Selection.Delete Shift:=xlToLeft
+    Worksheets("SÖZLEŞME BİLGİLERİ").Activate
+End Sub
+
