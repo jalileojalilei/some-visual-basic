@@ -1,0 +1,118 @@
+Sub data()
+    
+    Dim kullanici_adi As String
+    kullanici_adi = Worksheets("Ana Sayfa").Range("E7").Value
+    Dim hafta_baslangic_tarihi As String
+    hafta_baslangic_tarihi = Worksheets("Ana Sayfa").Range("E3").Value
+    Dim hafta_bitis_tarihi As String
+    hafta_bitis_tarihi = Worksheets("Ana Sayfa").Range("E5").Value
+    Dim sap_dosya_ismi As String
+    sap_dosya_ismi = "SAP-(" & hafta_baslangic_tarihi & ")-(" & hafta_bitis_tarihi & ")"
+    Dim hafta_numarasi As String
+    hafta_numarasi = Worksheets("Ana Sayfa").Range("E1").Value
+        
+    Sheets.Add(After:=Sheets("Kontrol Sayfası")).Name = "SAP RAPOR"
+    Workbooks.Open ("C:\Users\" & kullanici_adi & "\Desktop\Haftalık Rapor\" & hafta_numarasi & ".Hafta\" & sap_dosya_ismi & ".xlsx")
+    Cells.Select
+    Selection.Copy
+    Workbooks("Pisagor").Activate
+    Worksheets("SAP RAPOR").Activate
+    Cells(1, 1).Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Workbooks(sap_dosya_ismi).Activate
+    Selection.ClearOutline
+    Workbooks(sap_dosya_ismi).Close
+
+    Workbooks("Pisagor").Activate
+    Worksheets("SAP RAPOR").Activate
+    
+    Columns("A:C").Delete
+    Columns("C:E").Delete
+    Columns("G").Delete
+    Columns("H:U").Delete
+    Columns("C:C").Select
+    Selection.Cut
+    Range("H1").Select
+    ActiveSheet.Paste
+    Columns("D:D").Select
+    Selection.Cut
+    Range("C1").Select
+    ActiveSheet.Paste
+    Columns("F:F").Select
+    Selection.Cut
+    Range("D1").Select
+    ActiveSheet.Paste
+    Columns("E:E").Select
+    Selection.Cut
+    Range("F1").Select
+    ActiveSheet.Paste
+    Columns("H:H").Select
+    Selection.Cut
+    Range("E1").Select
+    ActiveSheet.Paste
+    Rows(1).Delete
+    
+    j = Cells(Rows.Count, "A").End(xlUp).Row
+    Rows(j).Delete
+    Rows(j - 1).Delete
+    Range("A1").Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy
+    
+    Worksheets("Veri").Activate
+    k = Cells(Rows.Count, "A").End(xlUp).Row
+    Cells(k + 1, 1).Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+            :=False, Transpose:=False
+    
+    Columns("C:C").Select
+    Selection.NumberFormat = "m/d/yyyy"
+    Columns.AutoFit
+    Application.DisplayAlerts = False
+    Worksheets("SAP RAPOR").Delete
+    Application.DisplayAlerts = True
+    
+    Dim yil As String
+    yil = Worksheets("Ana Sayfa").Range("E9").Value
+    'MsgBox (yil)
+    Dim veri_satir_sayisi As Integer
+    veri_satir_sayisi = Cells(Rows.Count, "A").End(xlUp).Row
+    'MsgBox (veri_satir_sayisi)
+    Worksheets("Veri").Activate
+    Dim genel_tutar_toplam As Double
+    genel_tutar_toplam = Application.WorksheetFunction.Sum(Range(Cells(2, 6), Cells(veri_satir_sayisi, 6)))
+    'MsgBox (genel_tutar_toplam)
+    Dim genel_miktar_toplam As Double
+    genel_miktar_toplam = Application.WorksheetFunction.Sum(Range(Cells(2, 5), Cells(veri_satir_sayisi, 5)))
+    'MsgBox (genel_miktar_toplam)
+    
+    Worksheets("Genel").Range("B13").Value = genel_tutar_toplam
+    Worksheets("Genel").Range("E13").Value = genel_miktar_toplam
+    Worksheets("Grafik Yıllık").Range("C12").Value = genel_tutar_toplam
+    Worksheets("Grafik Yıllık").Range("B12").Value = genel_miktar_toplam
+    
+    Range("B12").Select
+    Selection.Copy
+    Range("B13").Select
+    Selection.PasteSpecial Paste:=xlPasteFormats, Operation:=xlNone, _
+        SkipBlanks:=False, Transpose:=False
+    Application.CutCopyMode = False
+    
+    Range("B12").Select
+    Selection.Copy
+    Range("E13").Select
+    Selection.PasteSpecial Paste:=xlPasteFormats, Operation:=xlNone, _
+        SkipBlanks:=False, Transpose:=False
+    Application.CutCopyMode = False
+
+    
+'plent altı satış ve maliyet tablolarının hazırlanması
+'serim satış ve maliyet tablolarının hazırlanması
+'genel toplam satış ve maliyet tablolarının hazırlanması
+
+'yıllık databaselerin oluşturulması
+'genel ve aylık grafiklerin oluşturulması
+
+End Sub
