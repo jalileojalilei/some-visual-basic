@@ -1,0 +1,416 @@
+Sub hazirla()
+
+    var_1 = Sheets("UYGULAMA").Range("d2")
+    var_2 = Sheets("UYGULAMA").Range("d4")
+    
+    var_3 = Sheets("UYGULAMA").Range("d3")
+    var_4 = Sheets("UYGULAMA").Range("d5")
+        
+    For i = 3 To Application.Sheets.Count - 1
+        Worksheets(i).Activate
+            Cells.Replace What:=var_1, Replacement:=var_2, LookAt:= _
+            xlPart, SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+            ReplaceFormat:=False, FormulaVersion:=xlReplaceFormula2
+            
+            Cells.Replace What:=var_3, Replacement:=var_4, LookAt:= _
+            xlPart, SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+            ReplaceFormat:=False, FormulaVersion:=xlReplaceFormula2
+    Next i
+    
+    Worksheets("PLENT ALTI").Activate
+    son_satir = Cells(Rows.Count, "A").End(xlUp).Row - 2
+    
+    For B = 14 To 138 Step 6
+        For a = 8 To son_satir
+            Cells(a, B).Value = Cells(a, B).Value + Cells(a, B + 2).Value
+            Cells(a, B + 2).Value = ""
+            Cells(a, B + 1).Value = Cells(a, B + 1).Value + Cells(a, B + 3).Value
+            Cells(a, B + 3).Value = ""
+        Next a
+    Next B
+    
+    Worksheets("SAP RAPOR").Activate
+    
+    For i = 27 To 1 Step -1
+            Worksheets("SAP RAPOR").Cells(1, i).Activate
+        If InStr(ActiveCell.Value, "Satış blg.") > 0 Then
+            Worksheets("SAP RAPOR").Cells(1, i).Select
+        ElseIf InStr(ActiveCell.Value, "Referans değer") > 0 Then
+            Worksheets("SAP RAPOR").Cells(1, i).Select
+        ElseIf InStr(ActiveCell.Value, "Miktar") > 0 Then
+            Worksheets("SAP RAPOR").Cells(1, i).Select
+        ElseIf InStr(ActiveCell.Value, "Malzeme") > 0 Then
+            Worksheets("SAP RAPOR").Cells(1, i).Select
+        'ElseIf InStr(ActiveCell.Value, "Sipariş veren") > 0 Then
+            'Worksheets("SAP RAPOR").Cells(1, i).Select
+        Else
+            Worksheets("SAP RAPOR").Columns(i).Delete
+        End If
+    Next i
+
+    Worksheets("SAP RAPOR").Columns("B:B").Select
+    Selection.Cut
+    Worksheets("SAP RAPOR").Columns("E:E").Select
+    ActiveSheet.Paste
+    Worksheets("SAP RAPOR").Columns("D:D").Select
+    Selection.Cut
+    Worksheets("SAP RAPOR").Columns("B:B").Select
+    ActiveSheet.Paste
+    Worksheets("SAP RAPOR").Columns("E:E").Select
+    Selection.Cut
+    Worksheets("SAP RAPOR").Columns("D:D").Select
+    ActiveSheet.Paste
+
+    son = Worksheets("SAP RAPOR").Cells(Rows.Count, "A").End(xlUp).Row
+    Worksheets("SAP RAPOR").Rows(son).Delete
+    Worksheets("SAP RAPOR").Rows(son - 1).Delete
+    
+    Range("A1").Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Range(Selection, Selection.End(xlDown)).Select
+    ActiveWorkbook.Worksheets("SAP RAPOR").Sort.SortFields.Clear
+    ActiveWorkbook.Worksheets("SAP RAPOR").Sort.SortFields.Add2 Key:=Range( _
+        "A2:A231"), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
+        xlSortTextAsNumbers
+    ActiveWorkbook.Worksheets("SAP RAPOR").Sort.SortFields.Add2 Key:=Range( _
+        "B2:B231"), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
+        xlSortNormal
+    With ActiveWorkbook.Worksheets("SAP RAPOR").Sort
+        .SetRange Range("A1:D231")
+        .Header = xlYes
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+    Selection.Subtotal GroupBy:=2, Function:=xlSum, TotalList:=Array(3, 4), _
+        Replace:=True, PageBreaks:=False, SummaryBelowData:=True
+        
+ End Sub
+ Sub hazirla_2()
+ 
+    son_1 = Worksheets("SAP RAPOR").Cells(Rows.Count, "B").End(xlUp).Row
+    Worksheets("SAP RAPOR").Rows(son_1).Delete
+    
+    Worksheets("SAP RAPOR").Cells.Select
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    
+    For i = 1 To son_1 - 1
+        If Worksheets("SAP RAPOR").Cells(i, 1).Value <> "" Then
+            Worksheets("SAP RAPOR").Cells(i, 1).Select
+        Else
+            Worksheets("SAP RAPOR").Cells(i, 1).Value = Worksheets("SAP RAPOR").Cells(i - 1, 1).Value
+        End If
+    Next i
+    
+    Worksheets("SAP RAPOR").Activate
+    son_1 = Worksheets("SAP RAPOR").Cells(Rows.Count, "B").End(xlUp).Row
+    For i = son_1 To 2 Step -1
+             Worksheets("SAP RAPOR").Cells(i, 2).Activate
+        If InStr(ActiveCell.Value, "Toplam") > 0 Then
+            Worksheets("SAP RAPOR").Cells(i, 2).Select
+        Else
+            Worksheets("SAP RAPOR").Rows(i).Delete
+        End If
+    Next i
+        
+    Worksheets("SAP RAPOR").Activate
+    Worksheets("SAP RAPOR").Range("A1").Select
+    Worksheets("SAP RAPOR").Range(Selection, Selection.End(xlToRight)).Select
+    Worksheets("SAP RAPOR").Range(Selection, Selection.End(xlDown)).Select
+    Selection.RemoveSubtotal
+    
+    Worksheets("SAP RAPOR").Cells.Columns.AutoFit
+    
+    Worksheets("SAP RAPOR").Range("A1").Select
+    Worksheets("SAP RAPOR").Range(Selection, Selection.End(xlToRight)).Select
+    Worksheets("SAP RAPOR").Range(Selection, Selection.End(xlDown)).Select
+    Selection.NumberFormat = "General"
+    
+    silinecek_metin = "Toplam"
+    yeni_metin = ""
+    
+    Worksheets("SAP RAPOR").Columns("B:B").Select
+        Selection.Cells.Replace What:=silinecek_metin, Replacement:=yeni_metin, _
+        LookAt:=xlPart, SearchOrder:=xlByRows, _
+        MatchCase:=False, SearchFormat:=False, ReplaceFormat:=False
+       
+    Dim MyRange As Range
+    Worksheets("SAP RAPOR").Range("B1").Select
+    Worksheets("SAP RAPOR").Range(Selection, Selection.End(xlDown)).Select
+    Set MyRange = Selection
+    For Each cell In MyRange
+    cell.Value = Trim(cell)
+    Next
+        
+    Worksheets("SAP RAPOR").Columns("B:B").Select
+    Selection.NumberFormat = "@"
+    
+    Worksheets("SAP RAPOR").Cells.Columns.AutoFit
+    Worksheets("SAP RAPOR").Activate
+    
+    Worksheets("SAP RAPOR").Activate
+    son_2 = Worksheets("SAP RAPOR").Cells(Rows.Count, "B").End(xlUp).Row
+    
+    Dim rengo As Range
+    Worksheets("SAP RAPOR").Range("B1").Select
+    
+    Worksheets("SAP RAPOR").Range(Selection, Selection.End(xlDown)).Select
+    Set rengo = Selection
+    For Each cell In rengo
+    
+        If cell.Value = "3061" Then
+            cell.Value = "3020"
+        
+        ElseIf cell.Value = "3502" Then
+            cell.Value = "3002"
+        ElseIf cell.Value = "40019" Then
+            cell.Value = "3002"
+        
+        ElseIf cell.Value = "3507" Then
+            cell.Value = "3004"
+        ElseIf cell.Value = "3504" Then
+            cell.Value = "3004"
+        ElseIf cell.Value = "40022" Then
+            cell.Value = "3004"
+        End If
+    Next
+    
+    Range("B1").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.NumberFormat = "@"
+        
+    Worksheets("SAP RAPOR").Range("A1").Select
+    Worksheets("SAP RAPOR").Range(Selection, Selection.End(xlToRight)).Select
+    Worksheets("SAP RAPOR").Range(Selection, Selection.End(xlDown)).Select
+    Selection.Subtotal GroupBy:=2, Function:=xlSum, TotalList:=Array(3, 4), _
+        Replace:=True, PageBreaks:=False, SummaryBelowData:=True
+End Sub
+
+Sub hazirla_3()
+    Worksheets("SAP RAPOR").Cells.Select
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+
+    son_4 = Worksheets("SAP RAPOR").Cells(Rows.Count, "B").End(xlUp).Row
+    
+    For i = 1 To son_4 - 1
+        If Worksheets("SAP RAPOR").Cells(i, 1).Value <> "" Then
+            Worksheets("SAP RAPOR").Cells(i, 1).Select
+        Else
+            Worksheets("SAP RAPOR").Cells(i, 1).Value = Worksheets("SAP RAPOR").Cells(i - 1, 1).Value
+        End If
+    Next i
+    
+    Rows(son_4).Delete
+        
+    For i = son_4 - 1 To 2 Step -1
+              Worksheets("SAP RAPOR").Cells(i, 2).Activate
+         If InStr(ActiveCell.Value, "Toplam") > 0 Then
+             Worksheets("SAP RAPOR").Cells(i, 2).Select
+         Else
+             Worksheets("SAP RAPOR").Rows(i).Delete
+         End If
+     Next i
+    
+    Worksheets("SAP RAPOR").Range("A1").Select
+    Worksheets("SAP RAPOR").Range(Selection, Selection.End(xlToRight)).Select
+    Worksheets("SAP RAPOR").Range(Selection, Selection.End(xlDown)).Select
+    Selection.RemoveSubtotal
+    
+    silinecek_metin = "Toplam"
+    yeni_metin = ""
+    
+    Worksheets("SAP RAPOR").Columns("B:B").Select
+        Selection.Cells.Replace What:=silinecek_metin, Replacement:=yeni_metin, _
+        LookAt:=xlPart, SearchOrder:=xlByRows, _
+        MatchCase:=False, SearchFormat:=False, ReplaceFormat:=False
+        
+    Range("B1").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.NumberFormat = "@"
+        
+    Dim ASD As Range
+    Worksheets("SAP RAPOR").Range("B1").Select
+    Worksheets("SAP RAPOR").Range(Selection, Selection.End(xlDown)).Select
+    Set ASD = Selection
+    For Each cell In ASD
+    cell.Value = Trim(cell)
+    Next
+    
+    Worksheets("SAP RAPOR").Activate
+    son_5 = Worksheets("SAP RAPOR").Cells(Rows.Count, "B").End(xlUp).Row
+    
+    For i = 2 To son_5
+        'KOVA ASFALT / 3020 / 3061
+        If Cells(i, 2).Value = "3020" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 16), Cells(i, 17)).Select
+            ActiveSheet.Paste
+        ElseIf Cells(i, 2).Value = "3061" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 16), Cells(i, 17)).Select
+            ActiveSheet.Paste
+        'AŞINMA TİP 1 / 3002 / 3502 / 40019
+        ElseIf Cells(i, 2).Value = "3002" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 22), Cells(i, 23)).Select
+            ActiveSheet.Paste
+        ElseIf Cells(i, 2).Value = "3502" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 22), Cells(i, 23)).Select
+            ActiveSheet.Paste
+        ElseIf Cells(i, 2).Value = "40019" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 22), Cells(i, 23)).Select
+            ActiveSheet.Paste
+        'AŞINMA TİP 2 / 3003
+        ElseIf Cells(i, 2).Value = "3003" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 34), Cells(i, 35)).Select
+            ActiveSheet.Paste
+        'EMÜLSİYON CRS 1 / 3201
+        ElseIf Cells(i, 2).Value = "3201" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 40), Cells(i, 41)).Select
+            ActiveSheet.Paste
+        'DÖKME SOĞUK ASFALT / 3083
+        ElseIf Cells(i, 2).Value = "3083" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 46), Cells(i, 47)).Select
+            ActiveSheet.Paste
+        'BİNDER / 3004 / 3507 / 3504 / 40022
+        ElseIf Cells(i, 2).Value = "3004" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 58), Cells(i, 59)).Select
+            ActiveSheet.Paste
+        ElseIf Cells(i, 2).Value = "3507" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 58), Cells(i, 59)).Select
+            ActiveSheet.Paste
+        ElseIf Cells(i, 2).Value = "3504" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 58), Cells(i, 59)).Select
+            ActiveSheet.Paste
+        ElseIf Cells(i, 2).Value = "40022" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 58), Cells(i, 59)).Select
+            ActiveSheet.Paste
+        'YALITIM - İS-COAT / 3401-A
+        ElseIf Cells(i, 2).Value = "3401-A" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 64), Cells(i, 65)).Select
+            ActiveSheet.Paste
+        'ÇATLAK DERZ BİTÜMÜ / 3403-A
+        ElseIf Cells(i, 2).Value = "3403-A" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 70), Cells(i, 71)).Select
+            ActiveSheet.Paste
+        'AŞINMA TİP 1 BİTÜM FASON / 3802
+        ElseIf Cells(i, 2).Value = "3802" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 76), Cells(i, 77)).Select
+            ActiveSheet.Paste
+        'AŞINMA TİP 2 BİTÜM FASON / 3803
+        ElseIf Cells(i, 2).Value = "3803" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 82), Cells(i, 83)).Select
+            ActiveSheet.Paste
+        'BİTÜM 160-220 / 50-70 / 3804
+        ElseIf Cells(i, 2).Value = "3804" Then
+            Range(Cells(i, 3), Cells(i, 4)).Select
+            Application.CutCopyMode = False
+            Selection.Cut
+            Range(Cells(i, 118), Cells(i, 119)).Select
+            ActiveSheet.Paste
+        End If
+    Next i
+    
+        Range("c1").ClearContents
+        Range("d1").ClearContents
+        
+    son_6 = Worksheets("SAP RAPOR").Cells(Rows.Count, "A").End(xlUp).Row
+    
+    Worksheets("SAP RAPOR").Activate
+    For i = 2 To son_6
+        Cells(i, 3).Activate
+        ActiveCell.FormulaR1C1 = "=VLOOKUP(RC[-2],'FİRMA LİSTESİ'!R1C1:R173C3,2,0)"
+    Next i
+
+    Dim sira_no As Long
+    Dim sutun_no As Long
+    
+    For i = 2 To son_6
+    Worksheets("SAP RAPOR").Activate
+        If Cells(i, 2).Value = "3020" Then
+            sutun_no = 16
+        ElseIf Cells(i, 2).Value = "3002" Then
+            sutun_no = 22
+        ElseIf Cells(i, 2).Value = "3003" Then
+            sutun_no = 34
+        ElseIf Cells(i, 2).Value = "3201" Then
+            sutun_no = 40
+        ElseIf Cells(i, 2).Value = "3083" Then
+            sutun_no = 46
+        ElseIf Cells(i, 2).Value = "3004" Then
+            sutun_no = 58
+        ElseIf Cells(i, 2).Value = "3401-A" Then
+            sutun_no = 64
+        ElseIf Cells(i, 2).Value = "3403-A" Then
+            sutun_no = 70
+        ElseIf Cells(i, 2).Value = "3802" Then
+            sutun_no = 76
+        ElseIf Cells(i, 2).Value = "3803" Then
+            sutun_no = 82
+        ElseIf Cells(i, 2).Value = "3804" Then
+            sutun_no = 118
+        End If
+        
+        Range(Cells(i, sutun_no), Cells(i, sutun_no + 1)).Select
+        Selection.Copy
+        Worksheets("PLENT ALTI").Activate
+        sira_no = Worksheets("SAP RAPOR").Cells(i, 3).Value + 7
+        Cells(sira_no, sutun_no).Select
+        Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Next i
+    
+    Worksheets("SAP RAPOR").Activate
+    Cells.ClearContents
+    
+End Sub
