@@ -1,0 +1,87 @@
+Sub deneme()
+
+Application.DisplayAlerts = False
+    
+    Worksheets("sap veri").Activate
+
+    last_row = Cells(Rows.Count, 1).End(xlUp).Row
+    
+    Range(Cells(1, 1), Cells(last_row, 4)).Copy
+    Worksheets("hibe_miktar").Activate
+    Range("A1").PasteSpecial Paste:=xlPasteValues
+
+Columns(2).Delete
+Columns(2).Delete
+Cells.Columns.AutoFit
+
+    For i = 2 To last_row
+            Cells(i, 1).Activate
+        If InStr(ActiveCell.Value, "BELEDİYESİ") > 0 Then
+            Cells(i, 1).Select
+        ElseIf InStr(ActiveCell.Value, "İÇKALE") > 0 Then
+            Cells(i, 1).Select
+        ElseIf InStr(ActiveCell.Value, "İSFALT") > 0 Then
+            Cells(i, 1).Select
+        Else
+            Cells(i, 1).Clear
+            Cells(i, 1).Value = Cells(i - 1, 1).Value
+        End If
+    Next i
+    
+    m_last_row = Cells(Rows.Count, 1).End(xlUp).Row
+    
+    For i = m_last_row To 1 Step -1
+            Cells(i, 1).Activate
+        If InStr(ActiveCell.Value, "İÇKALE") > 0 Then
+            Rows(i).Delete
+        ElseIf InStr(ActiveCell.Value, "İSFALT") > 0 Then
+            Rows(i).Delete
+        Else
+            Rows(i).Select
+        End If
+    Next i
+    
+        Range("A1:B1").Select
+        Range(Selection, Selection.End(xlDown)).Select
+            Selection.Subtotal groupby:=1, Function:=xlSum, totallist:=Array(2), _
+                Replace:=True, pagebreaks:=False, summarybelowdata:=True
+        last_row_2 = Cells(Rows.Count, 1).End(xlUp).Row
+        Range(Cells(1, 1), Cells(last_row_2, 2)).Copy
+        Range("a1").PasteSpecial Paste:=xlPasteValues
+        Rows(last_row_2).Delete
+
+        last_row_3 = Cells(Rows.Count, 1).End(xlUp).Row
+    For i = last_row_3 To 1 Step -1
+            Cells(i, 1).Activate
+        If InStr(ActiveCell.Value, "Toplam") > 0 Then
+            Cells(last_row_3, 1).Select
+        Else
+            Rows(i).Delete
+        End If
+    Next i
+
+        last_row_4 = Cells(Rows.Count, 1).End(xlUp).Row
+        Columns("B:B").Cut
+        Columns("F:F").Insert Shift:=xlToRight
+        
+        Columns("A:A").Select
+        Selection.TextToColumns Destination:=Range("A1"), DataType:=xlDelimited, _
+            TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=True, Tab:=True, _
+            Semicolon:=False, Comma:=False, Space:=True, Other:=False, FieldInfo _
+            :=Array(Array(1, 1), Array(2, 1), Array(3, 1), Array(4, 1)), TrailingMinusNumbers:= _
+            True
+        Cells.Columns.AutoFit
+    
+    Columns(1).Delete
+    Columns(2).Delete
+    Columns(2).Delete
+    
+Application.DisplayAlerts = True
+
+        Worksheets("ilçe hibe").Activate
+        
+        Range("H8").Formula = "=IFERROR(VLOOKUP(B8,hibe_miktar!$A$1:$B$39,2,0),0)"
+        Range("H8:H8").AutoFill Destination:=Range("H8:H46")
+        
+End Sub
+
