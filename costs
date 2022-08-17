@@ -1,0 +1,530 @@
+Sub imalat_miktarlarini_hesapla()
+'''imalatların sap raporundan çekilmesi'''
+    Worksheets("B.F.T.C.").Activate
+        For i = 3 To 26
+            '1
+            If Cells(i, 2).Value = "KGM/6220/A" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="FİNİŞER"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=52, Criteria1:="ASFALT BİTÜMLÜ TEMEL TİP A"
+                
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Worksheets("B.F.T.C.").Activate
+                Range("H3").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '2
+            ElseIf Cells(i, 2).Value = "KGM/6320/A" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="FİNİŞER"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=52, Criteria1:="ASFALT BİNDER"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Worksheets("B.F.T.C.").Activate
+                Range("H4").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '3
+            ElseIf Cells(i, 2).Value = "KGM/6410/A" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="FİNİŞER"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=52, Criteria1:="ASFALT AŞINMA TİP 1"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H5").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                    
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '4
+            ElseIf Cells(i, 2).Value = "ASF_ÖZEL_01" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="=ROBOT KOMPAKTÖR", Operator:=xlOr, Criteria2:="=ROBOT"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=52, Criteria1:="=ASFALT AŞINMA TİP 1", Operator:=xlOr, Criteria2:="=ASFALT AŞINMA TİP 2"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H6").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '5
+            ElseIf Cells(i, 2).Value = "ASF_ÖZEL_02" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="ROBOT YAMA"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=52, Criteria1:="=ASFALT AŞINMA TİP 1", Operator:=xlOr, Criteria2:="=ASFALT AŞINMA TİP 2"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H7").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '6
+            ElseIf Cells(i, 2).Value = "ASF_ÖZEL_03" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="EL İŞÇİLİĞİ"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=52, Criteria1:="ASFALT AŞINMA TİP 1"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H8").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '7
+            ElseIf Cells(i, 2).Value = "KGM/40.130/A" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="KAZI"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=52, Criteria1:="ASFALT KAZI"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H9").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '8
+            ElseIf Cells(i, 2).Value = "ASF.BACA.YÜKSELTME" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="BACA IZGARA"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=52, Criteria1:="İBB YAĞM.İSKİ PTT KAP.10 CM YÜKS."
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H10").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '9
+            'ElseIf Cells(i, 2).Value = "ASF.BUŞAKLE.VANA.YUK" Then
+                'Worksheets("SAP Rapor").Activate
+                'Cells.Select
+                'Selection.AutoFilter
+                'ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=6, Criteria1:="FİNİŞER"
+                'ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=7, Criteria1:="ASFALT BİNDER"
+            
+                'Application.Goto Reference:="R1000001C8"
+                'Application.CutCopyMode = False
+                'ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                'Range("H1000001").Select
+                'Selection.Copy
+                'Sheets("B.F.T.C.").Select
+                'Range("H11").Select
+                'Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    ':=False, Transpose:=False
+            '10
+            ElseIf Cells(i, 2).Value = "ASF.IZG.YÜKSELTM/1" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="BACA IZGARA"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=52, Criteria1:="=İDARE.MALI 60*60 IZGARANIN YÜKSELTİLMESİ", Operator:=xlOr, Criteria2:="=İDARE.MALI 60*100 IZGARANIN YÜKSELTİLMRS"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H12").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '11
+            ElseIf Cells(i, 2).Value = "ASF.NAK.01" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="NAKLİYE"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=17, Criteria1:="ISF.NKL.01"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H13").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '12
+            ElseIf Cells(i, 2).Value = "ASF.NAK.02" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="NAKLİYE"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=17, Criteria1:="ISF.NKL.02"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H14").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '13
+            ElseIf Cells(i, 2).Value = "ASF.NAK.03" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="NAKLİYE"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=17, Criteria1:="ISF.NKL.03"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H15").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '14
+            ElseIf Cells(i, 2).Value = "ASF.NAK.04" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="NAKLİYE"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=17, Criteria1:="ISF.NKL.04"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H16").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '15
+            ElseIf Cells(i, 2).Value = "ASF.NAK.05" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="NAKLİYE"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=17, Criteria1:="ISF.NKL.05"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H17").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '16
+            ElseIf Cells(i, 2).Value = "ASF.NAK.06" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="NAKLİYE"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=17, Criteria1:="ISF.NKL.06"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H18").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '17
+            ElseIf Cells(i, 2).Value = "ASF.NAK.07" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="NAKLİYE"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=17, Criteria1:="ISF.NKL.07"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H19").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '18
+            ElseIf Cells(i, 2).Value = "ASF.NAK.08" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="NAKLİYE"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=17, Criteria1:="ISF.NKL.08"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H20").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '19
+            ElseIf Cells(i, 2).Value = "ASF.NAK.09" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="NAKLİYE"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=17, Criteria1:="ISF.NKL.09"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H21").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '20
+            ElseIf Cells(i, 2).Value = "ASF.NAK.10" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="NAKLİYE"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=17, Criteria1:="ISF.NKL.10"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H22").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '21
+            ElseIf Cells(i, 2).Value = "ASF.NAK.11" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="NAKLİYE"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=17, Criteria1:="ISF.NKL.11"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H23").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '22
+            ElseIf Cells(i, 2).Value = "ASF.NAK.12" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="NAKLİYE"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=17, Criteria1:="ISF.NKL.12"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H24").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            '23
+            ElseIf Cells(i, 2).Value = "EC1" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=52, Criteria1:="EMÜLSİYON CRS 1"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H25").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+             '24
+            ElseIf Cells(i, 2).Value = "PM" Then
+                Worksheets("SAP Rapor").Activate
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=26, Criteria1:="0"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=45, Criteria1:="FİNİŞER"
+                ActiveSheet.Range("$A$1:$BJ$1000000").AutoFilter Field:=52, Criteria1:="PLENT-MIX TEMEL"
+            
+                Application.Goto Reference:="R1000001C19"
+                Application.CutCopyMode = False
+                ActiveCell.FormulaR1C1 = "=SUBTOTAL(9,R[-999999]C:R[-1]C)"
+                Range("S1000001").Select
+                Selection.Copy
+                Sheets("B.F.T.C.").Select
+                Range("H26").Select
+                Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+                    :=False, Transpose:=False
+                    
+                Worksheets("SAP Rapor").Activate
+                Cells.AutoFilter
+                Range("S1000001").ClearContents
+                Worksheets("B.F.T.C.").Activate
+            End If
+        Next i
+        
+        Worksheets("SAP Rapor").Activate
+        Range("H1000001").ClearContents
+       
+        Worksheets("B.F.T.C.").Activate
+        Range("Z3").Select
+        Application.CutCopyMode = False
+        ActiveCell.FormulaR1C1 = "=RC[-18]*RC[-17]"
+        Range("Z3").Select
+        Selection.AutoFill Destination:=Range("Z3:Z26")
+        Range("Z3:Z26").Select
+        Selection.Copy
+        Range("J3").Select
+        Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+            :=False, Transpose:=False
+        
+        Range("Z3:Z26").Select
+        Selection.ClearContents
+        
+        Worksheets("B.F.T.C.").Activate
+        Cells.Columns.AutoFit
+'''imalatların sap raporundan çekilmesi'''
+End Sub
+
+
+
