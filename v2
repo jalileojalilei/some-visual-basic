@@ -1,0 +1,336 @@
+Sub atasman_program()
+
+'Kapak Bilgilerin Kopyalanması
+
+            Worksheets("Örnek Sayfa").Activate
+            
+            Range("B1").Formula = "=Kapak!B1"
+            Range("C1").Formula = "=Kapak!B2"
+            Range("C2").Formula = "=Kapak!B3"
+            Range("H1").Formula = "=Kapak!B7"
+            Range("H2").Formula = "=Kapak!B8"
+            Range("H3").Formula = "=Kapak!B9"
+            Range("H4").Formula = "=Kapak!B10"
+            Range("C5").Formula = "=Kapak!B11"
+            Range("C6").Formula = "=Kapak!B13"
+            
+            Application.DisplayAlerts = False
+            Worksheets("Örnek Sayfa").Activate
+            Range("B1:H75").Copy
+            Range("B1").PasteSpecial xlPasteValues
+            Application.DisplayAlerts = True
+            
+            Range("A1").ClearOutline
+
+'SAP Satırlarının Temizlenmesi
+            
+            Worksheets("Ataşman Liste").Activate
+        
+        For a = 2 To 1500
+          
+            Cells(a, 1).Activate
+        
+            If IsEmpty(ActiveCell) Then
+                Selection.EntireRow.Delete
+            Else
+                Rows(a).Select
+            End If
+            
+        Next a
+            
+            Cells(1, 1).Activate
+            
+'Pozların Sıralanması
+
+Application.DisplayAlerts = False
+
+            Sheets("Ataşman Liste").Select
+    
+            Range("C2").Select
+            Range(Selection, Selection.End(xlDown)).Select
+            ActiveWorkbook.Worksheets("Ataşman Liste").Sort.SortFields.Clear
+            ActiveWorkbook.Worksheets("Ataşman Liste").Sort.SortFields.Add Key:=Range( _
+            "C2"), SortOn:=xlSortOnValues, Order:=xlDescending, DataOption:= _
+            xlSortNormal
+    
+            With ActiveWorkbook.Worksheets("Ataşman Liste").Sort
+                .SetRange Range("A2:H1015")
+                .Header = xlNo
+                .MatchCase = False
+                .Orientation = xlTopToBottom
+                .SortMethod = xlPinYin
+                .Apply
+            End With
+            
+Application.DisplayAlerts = True
+
+'İlçelerin Ayrılması
+
+Application.DisplayAlerts = False
+
+    Worksheets("Ataşman Liste").Activate
+        
+        For c = 2 To 1500
+            
+            Worksheets("ataşman liste").Activate
+
+            If Cells(c, 8) = Cells(c + 1, 8) Then
+            Rows(c + 1).Select
+            Else
+            Rows(c + 1).Select
+            Selection.EntireRow.Insert
+            c = c + 1
+            End If
+        
+        Next c
+
+            Range("A1").Select
+            Selection.Activate
+            Rows(2).Select
+            Selection.EntireRow.Insert
+            
+Application.DisplayAlerts = True
+
+'İlçelerin Sayılması
+
+    Application.DisplayAlerts = False
+
+        For d = 3 To 2000
+
+            Cells(d, 8).Select
+
+            Range(Selection, Selection.End(xlDown)).Select
+
+            MsgBox Selection.Rows.Count
+            Application.SendKeys ("{Enter}")
+
+            Cells(d + Selection.Rows.Count - 1, 9).Value = Selection.Rows.Count
+    
+            d = d + Selection.Rows.Count
+
+        Next d
+
+    Application.DisplayAlerts = True
+
+            Cells(1048576, 9).Select
+            Selection.Clear
+
+            Range("A1").Select
+            Selection.Activate
+
+'53 Satır Ayırma İşlemleri
+           
+        Worksheets("ataşman liste").Activate
+
+        Cells(1048576, 9).Select
+        Selection.Clear
+    
+    For e = 1 To 2000
+    
+        Worksheets("ataşman liste").Activate
+        
+        If Cells(e, 9) < 53 Then
+            
+            Rows(e + 1).Select
+        Else
+            
+            Cells(e, 8).Select
+            Selection.End(xlUp).Select
+            Rows(ActiveCell.Row + 52).Select
+            Selection.EntireRow.Insert
+            Columns(9).Select
+            Selection.Clear
+            
+            For f = 3 To 2000
+                
+                
+                Cells(f, 8).Select
+                
+                Range(Selection, Selection.End(xlDown)).Select
+                
+                MsgBox Selection.Rows.Count
+                Application.SendKeys ("{Enter}")
+                
+                Cells(f + Selection.Rows.Count - 1, 9).Value = Selection.Rows.Count
+                f = f + Selection.Rows.Count
+            
+            
+            
+            Next f
+            
+            Cells(1048576, 9).Select
+            Selection.Clear
+            
+        End If
+        
+    Next e
+            
+            Cells(1048576, 9).Select
+            Selection.Clear
+            
+            Range("A1").Select
+            Selection.Activate
+            
+            Columns(9).Select
+            Selection.Clear
+            
+'Bahçelievler Ayırma
+
+    Worksheets("Ataşman Liste").Activate
+
+        For p = 3 To 1500
+
+            If Cells(p, 8) = Cells(p + 1, 8) Then
+            Rows(p + 1).Select
+            Else
+            Cells(p + 1, 8).Value = "Toplam"
+            Rows(p + 2).Select
+            Selection.EntireRow.Insert
+            p = p + 2
+            End If
+
+        Next p
+
+            Range("A1").Select
+            Selection.Activate
+            
+'Ataşmanların Oluşturulması
+
+Worksheets("Ataşman Liste").Activate
+
+        For g = 3 To 2000
+
+            Worksheets("Ataşman Liste").Activate
+            
+            If Cells(g, 8) = Cells(g + 1, 8) Then
+                Rows(g).Select
+            Else
+                Cells(g + 1, 8).Select
+                Range(Selection, Selection.End(xlUp)).Select
+                Range(Selection, Selection.End(xlToLeft)).Select
+                Selection.Copy
+                Worksheets("Örnek Sayfa").Select
+                Range("C11").PasteSpecial
+            
+            Range("C7").Value = Range("I11").Value & " " & "MÜDÜR YARDIMCILIĞI"
+            
+            Range("C8").Value = Range("J11").Value
+            
+            Range("E69").Value = Range("J11").Value & " " & "BELEDİYESİ"
+            
+            Range("G69").Value = Range("I11").Value & " " & "MÜDÜR YARDIMCILIĞI"
+            
+            If Range("I11") = "1.BÖLGE" Then
+                Range("G70").Value = "AHMET YILDIRIM"
+            ElseIf Range("I11") = "2.BÖLGE" Then
+                Range("G70").Value = "MERVAN BUDAK"
+            ElseIf Range("I11") = "3.BÖLGE" Then
+                Range("G70").Value = "SALİH RAMOĞLU"
+            ElseIf Range("I11") = "4.BÖLGE" Then
+                Range("G70").Value = "ONUR EROL"
+            ElseIf Range("I11") = "5.BÖLGE" Then
+                Range("G70").Value = "MURAT ÇETİN"
+            ElseIf Range("I11") = "6.BÖLGE(AND.)" Then
+                Range("G70").Value = "MEHMET ALİ USTA"
+            ElseIf Range("I11") = "6.BÖLGE(AND.)" Then
+                Range("G70").Value = "CENGİZHAN YANAR"
+            ElseIf Range("I11") = "7.BÖLGE" Then
+                Range("G70").Value = "MUSTAFA EREN"
+            ElseIf Range("I11") = "8.BÖLGE" Then
+                Range("G70").Value = "EDİZ KUTLU"
+            ElseIf Range("I11") = "9.BÖLGE" Then
+                Range("G70").Value = "ÖNDER DALDI"
+            Else
+                Rows(1).Select
+            End If
+            
+            Range("G64").Formula = "=SUM(G11:G63)"
+            
+            Range("C11:C64").Select
+            Selection.NumberFormat = "m/d/yyyy"
+                        
+            Range("B11:H64").Select
+            Selection.Borders(xlDiagonalDown).LineStyle = xlNone
+            Selection.Borders(xlDiagonalUp).LineStyle = xlNone
+            With Selection.Borders(xlEdgeLeft)
+                .LineStyle = xlContinuous
+                .ColorIndex = 0
+                .TintAndShade = 0
+                .Weight = xlThin
+            End With
+            With Selection.Borders(xlEdgeTop)
+                .LineStyle = xlContinuous
+                .ColorIndex = 0
+                .TintAndShade = 0
+                .Weight = xlThin
+            End With
+            With Selection.Borders(xlEdgeBottom)
+                .LineStyle = xlContinuous
+                .ColorIndex = 0
+                .TintAndShade = 0
+                .Weight = xlThin
+            End With
+            With Selection.Borders(xlEdgeRight)
+                .LineStyle = xlContinuous
+                .ColorIndex = 0
+                .TintAndShade = 0
+                .Weight = xlThin
+            End With
+            With Selection.Borders(xlInsideVertical)
+                .LineStyle = xlContinuous
+                .ColorIndex = 0
+                .TintAndShade = 0
+                .Weight = xlThin
+            End With
+            With Selection.Borders(xlInsideHorizontal)
+                .LineStyle = xlContinuous
+                .ColorIndex = 0
+                .TintAndShade = 0
+                .Weight = xlThin
+            End With
+    
+                If Cells(11, 5) = "ASFALT BİNDER" Then
+                Cells(9, 3) = "KAP.002"
+                Else
+                Cells(9, 3) = "KAP.001"
+                End If
+                
+            Worksheets("örnek sayfa").Activate
+            
+            Range("F64").Value = "Toplam:"
+            Range("H64").Value = "TON"
+            
+            Range("B1:H75").Copy
+            
+            Worksheets("Ataşmanlar").Activate
+            
+            Range("A30000").End(xlUp).Offset(1, 0).PasteSpecial
+            
+            Worksheets("örnek sayfa").Activate
+            
+            Range("B11:J63").Clear
+             
+            g = g + 2
+        
+            End If
+            
+            Next g
+    
+            Worksheets("ataşmanlar").Activate
+                    
+            Columns("A").ColumnWidth = 15
+            Columns("B").ColumnWidth = 15
+            Columns("C").ColumnWidth = 30
+            Columns("D").ColumnWidth = 30
+            Columns("E").ColumnWidth = 20
+            Columns("F").ColumnWidth = 15
+            Columns("G").ColumnWidth = 15
+
+                Range("A1").Activate
+                
+            Worksheets("Ataşmanlar").Activate
+            Rows(1).EntireRow.Delete
+                            
+'Yazdırma Alanının Ayarlanması
+
+End Sub
